@@ -36,5 +36,5 @@ def update(flame, Kabuka):
  
  
 ani = anm.FuncAnimation(fig, update, fargs=(Kabuka,), interval=10, frames=m)
-ani.save("matplotlib/analysis/black_scholes/000.mp4", writer="ffmpeg", fps=25)
+ani.save("black_scholes.mp4", writer="ffmpeg", fps=25)
 #plt.show()
