@@ -82,5 +82,5 @@ def update(flame, x, y):
  
  
 ani = anm.FuncAnimation(fig, update, fargs=(x, y), interval=10, frames=M)
-ani.save("analysis/static_mecha/SMA.mp4", writer="ffmpeg", fps=25)
+ani.save("SMA.mp4", writer="ffmpeg", fps=25)
 #plt.show()
