@@ -4,6 +4,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import matplotlib.animation as anm
 import math
+from scipy.spatial import KDTree
 fig = plt.figure(figsize=(10, 10))
 ax1 = plt.subplot2grid((2,2),(0,0))
 ax2 = plt.subplot2grid((2,2),(0,1))
@@ -36,18 +37,20 @@ E0 = 300
 CollEnd=20000
 Coll = np.array([-1 for i in range(M)]) 
 def update(flame, x, y):
-    global collisions
+    global collisions,CollEnd
     if flame != 0:
         ax1.cla()
         ax2.cla()
         ax3.cla()
         ax4.cla()
+    kd_tree = KDTree([[xi,yi] for xi,yi in zip(x,y)])
     for i in range(n):
-        for j in range(i+1,n):
-            if (x[i] - x[j])**2 + (y[i] - y[j])**2 <= r**2:
-                vx[i], vx[j] = ((1 - e) * vx[i] + (1 + e) * vx[j]) / 2, ((1 + e) * vx[i] + (1 - e) * vx[j]) / 2
-                vy[i], vy[j] = ((1 - e) * vy[i] + (1 + e) * vy[j]) / 2, ((1 + e) * vy[i] + (1 - e) * vy[j]) / 2
-                collisions += 1
+        for j in kd_tree.query_ball_point([x[i],y[i]], r):
+            if i==j:
+                continue
+            vx[i], vx[j] = ((1 - e) * vx[i] + (1 + e) * vx[j]) / 2, ((1 + e) * vx[i] + (1 - e) * vx[j]) / 2
+            vy[i], vy[j] = ((1 - e) * vy[i] + (1 + e) * vy[j]) / 2, ((1 + e) * vy[i] + (1 - e) * vy[j]) / 2
+            collisions += 1
     for i in range(n):
         if not(a < x[i] + vx[i] * dt < b):
             vx[i] = -vx[i]
@@ -58,6 +61,7 @@ def update(flame, x, y):
     E = (sum(vx ** 2 + vy ** 2) / 2)
     Energy[flame] = E
     Coll[flame] = collisions
+    CollEnd=max(collisions,CollEnd)
     ax1.grid(True)
     ax1.set_xlim(a, b)
     ax1.set_ylim(c, d)
