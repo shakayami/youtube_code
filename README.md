@@ -1,6 +1,6 @@
 # youtube_code
 
-https://www.youtube.com/channel/UCHAbHPk_1Nu22mr-ajoA73A
+[https://www.youtube.com/@shakayami](https://www.youtube.com/@shakayami)
 
 もしコードが動かない場合
 
